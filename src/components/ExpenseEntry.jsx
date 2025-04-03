@@ -1,16 +1,20 @@
 import React, { useState } from "react";
 
-const ExpenseEntry = ({setFormData,formData}) => {
-  
+const ExpenseEntry = ({ setFormData}) => {
+  function handleSubmit(e) {
+    e.preventDefault();
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.id]: e.target.value });
+    const form = e.target;
+    const formData = new FormData(form);
+
+    const formJson = Object.fromEntries(formData.entries());
+    setFormData((prevState) => [...prevState, formJson]);
     console.log(formData);
-  };
+  }
 
   return (
     <form
-      onSubmit={(e)=> e.preventDefault()}
+      onSubmit={(e) => handleSubmit(e)}
       className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
     >
       {/* Title and Amount */}
@@ -21,11 +25,9 @@ const ExpenseEntry = ({setFormData,formData}) => {
           </label>
           <input
             type="text"
-            id="title"
             placeholder="Enter title"
             className="inputStyle"
-            value={formData.title}
-            onChange={handleChange}
+            name="title"
           />
         </div>
         <div className="md:w-1/2 w-full">
@@ -34,11 +36,9 @@ const ExpenseEntry = ({setFormData,formData}) => {
           </label>
           <input
             type="number"
-            id="amount"
+            name="amount"
             placeholder="Enter amount"
             className="inputStyle"
-            value={formData.amount}
-            onChange={handleChange}
           />
         </div>
       </div>
@@ -50,10 +50,8 @@ const ExpenseEntry = ({setFormData,formData}) => {
             Category
           </label>
           <select
-            id="category"
+            name="category"
             className="inputStyle"
-            value={formData.category}
-            onChange={handleChange}
           >
             <option value="">-Select Category-</option>
             <option value="Food">Food</option>
@@ -66,10 +64,8 @@ const ExpenseEntry = ({setFormData,formData}) => {
           </label>
           <input
             type="date"
-            id="date"
+            name="date"
             className="inputStyle"
-            value={formData.date}
-            onChange={handleChange}
           />
         </div>
       </div>
@@ -81,10 +77,9 @@ const ExpenseEntry = ({setFormData,formData}) => {
             Payment Method
           </label>
           <select
-            id="paymentMethod"
+            name="paymentMethod"
             className="inputStyle"
-            value={formData.paymentMethod}
-            onChange={handleChange}
+
           >
             <option value="">-Select Payment-</option>
             <option value="Cash">Cash</option>
@@ -95,7 +90,7 @@ const ExpenseEntry = ({setFormData,formData}) => {
           <label htmlFor="file" className="label">
             Receipt Upload
           </label>
-          <input type="file" id="file" className="inputStyle" />
+          <input type="file" name="file" className="inputStyle" />
         </div>
       </div>
 
@@ -105,10 +100,8 @@ const ExpenseEntry = ({setFormData,formData}) => {
           Notes
         </label>
         <textarea
-          id="notes"
+          name="notes"
           className="inputStyle"
-          value={formData.notes}
-          onChange={handleChange}
         ></textarea>
       </div>
 
