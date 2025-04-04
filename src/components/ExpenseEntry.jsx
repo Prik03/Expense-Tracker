@@ -1,15 +1,26 @@
 import React, { useState } from "react";
 
 const ExpenseEntry = ({ setFormData}) => {
+
+
+
   function handleSubmit(e) {
     e.preventDefault();
-
     const form = e.target;
     const formData = new FormData(form);
 
     const formJson = Object.fromEntries(formData.entries());
-    setFormData((prevState) => [...prevState, formJson]);
-    console.log(formData);
+
+    const expenseWithId = { id: Date.now(), ...formJson };
+
+    setFormData((prevData) => {
+      if (Array.isArray(prevData)) {
+        return [...prevData, expenseWithId];
+      }
+      return [expenseWithId];
+    });
+    
+    console.log(expenseWithId);
   }
 
   return (
@@ -49,10 +60,7 @@ const ExpenseEntry = ({ setFormData}) => {
           <label htmlFor="category" className="label">
             Category
           </label>
-          <select
-            name="category"
-            className="inputStyle"
-          >
+          <select name="category" className="inputStyle">
             <option value="">-Select Category-</option>
             <option value="Food">Food</option>
             <option value="Rent">Rent</option>
@@ -62,11 +70,7 @@ const ExpenseEntry = ({ setFormData}) => {
           <label htmlFor="date" className="label">
             Date
           </label>
-          <input
-            type="date"
-            name="date"
-            className="inputStyle"
-          />
+          <input type="date" name="date" className="inputStyle" />
         </div>
       </div>
 
@@ -76,11 +80,7 @@ const ExpenseEntry = ({ setFormData}) => {
           <label htmlFor="paymentMethod" className="label">
             Payment Method
           </label>
-          <select
-            name="paymentMethod"
-            className="inputStyle"
-
-          >
+          <select name="paymentMethod" className="inputStyle">
             <option value="">-Select Payment-</option>
             <option value="Cash">Cash</option>
             <option value="Credit Card">Credit Card</option>
@@ -99,10 +99,7 @@ const ExpenseEntry = ({ setFormData}) => {
         <label htmlFor="notes" className="label">
           Notes
         </label>
-        <textarea
-          name="notes"
-          className="inputStyle"
-        ></textarea>
+        <textarea name="notes" className="inputStyle"></textarea>
       </div>
 
       {/* Submit Button */}

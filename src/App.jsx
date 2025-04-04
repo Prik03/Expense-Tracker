@@ -19,13 +19,16 @@ function App() {
 
   // Save formData to localStorage whenever it changes
   useEffect(() => {
+   
     localStorage.setItem("expenseData", JSON.stringify(formData));
+    // console.log(localStorage.getItem(JSON.parse("expenseData")));
+ 
   }, [formData]);
-
+  // console.log(formData)
   return (
     <>
-      <UserData data={formData} />
-      <ExpenseEntry setFormData={setFormData} formData={formData} />
+      <UserData data={formData} setFormData={setFormData} />
+      <ExpenseEntry setFormData={setFormData} formData={formData}/>
     </>
   );
 }
