@@ -1,45 +1,49 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 
-const UserData = (data) => {
+const UserData = ({data, setFormData}) => {
 
-  // useEffect(() => {
-  //   axios
-  //     .get("https://dummyjson.com/todos")
-  //     .then((resolve) => setData(resolve.data.todos))
-  //     .catch((err) => console.log("Not found user data", err));
-  // }, []);
-
-  // const deleteData=(id)=>{
-  //    const FilterData = data?.filter(item=>item.userId!==id);
-  //    setData(FilterData);
-  // }
+  const deleteData = (id) => {
+    const storedData = JSON.parse(localStorage.getItem("expenseData")) || [];
+  
+    const filteredData = storedData.filter(item => item.id !== id);
+  
+    localStorage.setItem("expenseData", JSON.stringify(filteredData));
+  
+    setFormData(filteredData);
+  };
+  
   return (
-    <>
-      <div>User Data</div>
-      <table border="1">
-        <thead>
+    <div className="px-5">
+      <div>Expense data</div>
+      <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+      <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+        <caption className="sr-only">Expense table</caption>
+        <thead  className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
           <tr>
-            <th>Sno.</th>
-            <th>Title</th>
-            <th>Amount</th>
-            <th>Category</th>
-            <th>Date</th>
-            <th>Category</th>
-            <th>Payment Mode</th>
+            <th scope="col" className="px-6 py-3">Sno.</th>
+            <th scope="col" className="px-6 py-3">ID</th>
+            <th scope="col" className="px-6 py-3">Title</th>
+            <th scope="col" className="px-6 py-3">Amount</th>
+            <th scope="col" className="px-6 py-3">Category</th>
+            <th scope="col" className="px-6 py-3">Date</th>
+            <th scope="col" className="px-6 py-3">Category</th>
+            <th scope="col" className="px-6 py-3">Payment Mode</th>
             {/* <th></th> */}
           </tr>
         </thead>
         <tbody>
-        {data && data.length > 0 ? (
+        {
+        data && data.length > 0 ? (
   data.map((item, index) => (
-    <tr key={item.id || index}>
-      <td>{index + 1}</td>
-      <td>{item.title}</td>
-      <td>{item.amount}</td>
-      <td>{item.category}</td>
-      <td>{item.date}</td>
-      <td>{item.paymentMethod}</td>
+    <tr key={index} className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 border-gray-200">
+      <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">{index + 1}</th>
+      <td className="px-6 py-4">{item.id}</td>
+      <td className="px-6 py-4">{item.title}</td>
+      <td className="px-6 py-4">{item.amount}</td>
+      <td className="px-6 py-4">{item.category}</td>
+      <td className="px-6 py-4">{item.date}</td>
+      <td className="px-6 py-4">{item.paymentMethod}</td>
       {/* <td>{item.notes}</td> */}
       <td>
         <button className="bg-blue-500 px-4 py-2 rounded my-2 mx-1">Edit</button>
@@ -59,7 +63,8 @@ const UserData = (data) => {
 )}
         </tbody>
       </table>
-    </>
+      </div>
+    </div>
   );
 };
 
