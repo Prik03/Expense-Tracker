@@ -2,6 +2,7 @@ import React, { useState } from "react";
 
 const UserData = ({ data, setFormData }) => {
   const [isEdit, setIsEdit] = useState(null);
+  const [newData,setNewData]=useState({})
   const deleteData = (id) => {
     const storedData = JSON.parse(localStorage.getItem("expenseData")) || [];
 
@@ -15,9 +16,24 @@ const UserData = ({ data, setFormData }) => {
   const editData = (id) => {
     const storedData = JSON.parse(localStorage.getItem("expenseData")) || [];
 
-    const filteredData = storedData.filter((item) => item.id === id);
-    setIsEdit(isEdit === null ? filteredData : null);
+    const editableData = storedData.filter((item) => item.id === id);
+    setIsEdit(isEdit === null ? editableData : null);
+    console.log()
+   
   };
+
+  const saveData = () => {
+    const storedData = JSON.parse(localStorage.getItem("expenseData")) || [];
+    const updatedData = storedData.map((item) =>
+      item.id === newData.id ? newData : item
+    );
+    localStorage.setItem("expenseData", JSON.stringify(updatedData));
+    setFormData(updatedData);
+    setIsEdit(null);
+    setNewData({});
+    console.log(newData);
+  };
+  
 
   return (
     <div className="px-5">
@@ -46,10 +62,10 @@ const UserData = ({ data, setFormData }) => {
                 Date
               </th>
               <th scope="col" className="px-6 py-3">
-                Category
+              Payment Mode
               </th>
               <th scope="col" className="px-6 py-3">
-                Payment Mode
+                Action
               </th>
               {/* <th></th> */}
             </tr>
@@ -74,8 +90,8 @@ const UserData = ({ data, setFormData }) => {
                       <input
                         className="inputStyle editInput"
                         placeholder="Enter new title"
-                        onChange={(e)=>console.log(e.target.value)}
-                      />
+                        onChange={(e) => setNewData(prev => ({ ...prev, title: e.target.value }))}
+                        />
                     ) : (
                       item.title
                     )}
@@ -85,6 +101,8 @@ const UserData = ({ data, setFormData }) => {
                       <input
                         className="inputStyle editInput"
                         placeholder="Amount"
+                        onChange={(e) => setNewData(prev => ({ ...prev, amount: e.target.value }))}
+
                       />
                     ) : (
                       item.amount
@@ -94,7 +112,9 @@ const UserData = ({ data, setFormData }) => {
                     {isEdit && isEdit[0]?.id === item.id ? (
                       <select
                         className="inputStyle editInput"
-                        placeholder="Amount"
+                        placeholder="Select category"
+                        onChange={(e) => setNewData(prev => ({ ...prev, category: e.target.value }))}
+
                       >
                         <option value="">-Select Category-</option>
                         <option value="Food">Food</option>
@@ -109,11 +129,13 @@ const UserData = ({ data, setFormData }) => {
                     {isEdit && isEdit[0]?.id === item.id ? (
                       <select
                         className="inputStyle editInput"
-                        placeholder="Amount"
+                        placeholder="Select payment method"
+                        onChange={(e) => setNewData(prev => ({ ...prev, payment: e.target.value }))}
+
                       >
                         <option value="">-Select Category-</option>
-                        <option value="Food">Food</option>
-                        <option value="Rent">Rent</option>
+                        <option value="Food">Cash</option>
+                        <option value="Rent">Credit card</option>
                       </select>
                     ) : (
                       item.paymentMethod
@@ -121,12 +143,18 @@ const UserData = ({ data, setFormData }) => {
                   </td>
                   {/* <td>{item.notes}</td> */}
                   <td>
-                    <button
+                    {/* <button
                       className="bg-blue-500 px-4 py-2 text-white rounded my-2 mx-1 font-semibold"
                       onClick={() => editData(item.id)}
                     >
                       {isEdit && isEdit[0].id ? "Save" : "Edit"}
-                    </button>
+                    </button> */}
+                    {isEdit && isEdit[0].id === item.id ? (
+  <button onClick={saveData}>Save</button>
+) : (
+  <button onClick={() => editData(item.id)}>Edit</button>
+)}
+
                     {isEdit && isEdit[0].id === item.id ? (
                       <button
                         className="bg-red-500 px-4 text-white py-2 rounded my-2 mx-1 font-semibold"
