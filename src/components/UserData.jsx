@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 const UserData = ({ data, setFormData }) => {
   const [isEdit, setIsEdit] = useState(null);
-  const [newData,setNewData]=useState({})
+  const [newData, setNewData] = useState({});
   const deleteData = (id) => {
     const storedData = JSON.parse(localStorage.getItem("expenseData")) || [];
 
@@ -18,8 +18,7 @@ const UserData = ({ data, setFormData }) => {
 
     const editableData = storedData.filter((item) => item.id === id);
     setIsEdit(isEdit === null ? editableData : null);
-    console.log()
-   
+    console.log();
   };
 
   const saveData = () => {
@@ -27,13 +26,15 @@ const UserData = ({ data, setFormData }) => {
     const updatedData = storedData.map((item) =>
       item.id === newData.id ? newData : item
     );
+    console.log(updatedData);
+
     localStorage.setItem("expenseData", JSON.stringify(updatedData));
     setFormData(updatedData);
+
     setIsEdit(null);
-    setNewData({});
+
     console.log(newData);
   };
-  
 
   return (
     <div className="px-5">
@@ -62,7 +63,7 @@ const UserData = ({ data, setFormData }) => {
                 Date
               </th>
               <th scope="col" className="px-6 py-3">
-              Payment Mode
+                Payment Mode
               </th>
               <th scope="col" className="px-6 py-3">
                 Action
@@ -83,15 +84,27 @@ const UserData = ({ data, setFormData }) => {
                   >
                     {index + 1}
                   </th>
-                  <td className="px-6 py-4">{item.id}</td>
+                  <td
+                    className="px-6 py-4"
+                    // onChange={()=> setNewData((prev)=>({...prev,id:item.id}));}
+                  >
+                    {item.id}
+                  </td>
 
                   <td className="px-6 py-4">
                     {isEdit && isEdit[0]?.id === item.id ? (
                       <input
                         className="inputStyle editInput"
                         placeholder="Enter new title"
-                        onChange={(e) => setNewData(prev => ({ ...prev, title: e.target.value }))}
-                        />
+                        onChange={(e) =>
+                          setNewData((prev) => ({
+                            ...prev,
+                            id: item.id,
+                            date: item.date,
+                            title: e.target.value,
+                          }))
+                        }
+                      />
                     ) : (
                       item.title
                     )}
@@ -101,8 +114,12 @@ const UserData = ({ data, setFormData }) => {
                       <input
                         className="inputStyle editInput"
                         placeholder="Amount"
-                        onChange={(e) => setNewData(prev => ({ ...prev, amount: e.target.value }))}
-
+                        onChange={(e) =>
+                          setNewData((prev) => ({
+                            ...prev,
+                            amount: e.target.value,
+                          }))
+                        }
                       />
                     ) : (
                       item.amount
@@ -113,8 +130,12 @@ const UserData = ({ data, setFormData }) => {
                       <select
                         className="inputStyle editInput"
                         placeholder="Select category"
-                        onChange={(e) => setNewData(prev => ({ ...prev, category: e.target.value }))}
-
+                        onChange={(e) =>
+                          setNewData((prev) => ({
+                            ...prev,
+                            category: e.target.value,
+                          }))
+                        }
                       >
                         <option value="">-Select Category-</option>
                         <option value="Food">Food</option>
@@ -129,13 +150,16 @@ const UserData = ({ data, setFormData }) => {
                     {isEdit && isEdit[0]?.id === item.id ? (
                       <select
                         className="inputStyle editInput"
-                        placeholder="Select payment method"
-                        onChange={(e) => setNewData(prev => ({ ...prev, payment: e.target.value }))}
-
+                        onChange={(e) =>
+                          setNewData((prev) => ({
+                            ...prev,
+                            paymentMethod: e.target.value,
+                          }))
+                        }
                       >
-                        <option value="">-Select Category-</option>
-                        <option value="Food">Cash</option>
-                        <option value="Rent">Credit card</option>
+                        <option value="">-Select Payment Method-</option>
+                        <option value="Cash">Cash</option>
+                        <option value="Credit card">Credit card</option>
                       </select>
                     ) : (
                       item.paymentMethod
@@ -143,17 +167,21 @@ const UserData = ({ data, setFormData }) => {
                   </td>
                   {/* <td>{item.notes}</td> */}
                   <td>
-                    {/* <button
-                      className="bg-blue-500 px-4 py-2 text-white rounded my-2 mx-1 font-semibold"
-                      onClick={() => editData(item.id)}
-                    >
-                      {isEdit && isEdit[0].id ? "Save" : "Edit"}
-                    </button> */}
                     {isEdit && isEdit[0].id === item.id ? (
-  <button onClick={saveData}>Save</button>
-) : (
-  <button onClick={() => editData(item.id)}>Edit</button>
-)}
+                      <button
+                        onClick={saveData}
+                        className="bg-blue-500 px-4 text-white py-2 rounded my-2 mx-1 font-semibold"
+                      >
+                        Save
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() => editData(item.id)}
+                        className="bg-blue-500 px-4 text-white py-2 rounded my-2 mx-1 font-semibold"
+                      >
+                        Edit
+                      </button>
+                    )}
 
                     {isEdit && isEdit[0].id === item.id ? (
                       <button
