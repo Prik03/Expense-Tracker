@@ -24,7 +24,7 @@ function App() {
     // console.log(localStorage.getItem(JSON.parse("expenseData")));
  
   }, [formData]);
-  // console.log(formData)
+  console.log(formData)
   return (
     <>
       <UserData data={formData} setFormData={setFormData} />

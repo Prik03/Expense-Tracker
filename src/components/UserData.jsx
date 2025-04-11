@@ -36,6 +36,10 @@ const UserData = ({ data, setFormData }) => {
     console.log(newData);
   };
 
+  const Receipt=(image)=>{
+console.log(image);
+  }
+
   return (
     <div className="px-5">
       <div>Expense data</div>
@@ -64,6 +68,9 @@ const UserData = ({ data, setFormData }) => {
               </th>
               <th scope="col" className="px-6 py-3">
                 Payment Mode
+              </th>
+              <th scope="col" className="px-6 py-3">
+                Recipts
               </th>
               <th scope="col" className="px-6 py-3">
                 Action
@@ -100,6 +107,7 @@ const UserData = ({ data, setFormData }) => {
                           setNewData((prev) => ({
                             ...prev,
                             id: item.id,
+                            file: item.file,
                             date: item.date,
                             title: e.target.value,
                           }))
@@ -164,6 +172,9 @@ const UserData = ({ data, setFormData }) => {
                     ) : (
                       item.paymentMethod
                     )}
+                  </td>
+                  <td>
+                    <button onClick={()=>Receipt(item.file.name)}>View Receipt</button>
                   </td>
                   {/* <td>{item.notes}</td> */}
                   <td>
